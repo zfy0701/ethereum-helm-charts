@@ -64,10 +64,12 @@ defaultCommandTemplate: |
     --ws.addr=0.0.0.0
     --ws.port={{ .Values.wsPort }}
     --ws.origins=*
+  {{- if .Values.authrpc.enabled }}
     --authrpc.jwtsecret=/data/jwt.hex
     --authrpc.addr=0.0.0.0
     --authrpc.port={{ .Values.authPort }}
     --authrpc.vhosts=*
+  {{- end }}
     --metrics
     --metrics.addr=0.0.0.0
     --metrics.port={{ .Values.metricsPort }}
@@ -77,6 +79,12 @@ defaultCommandTemplate: |
 
 # -- Legacy way of overwriting the default command. You may prefer to change defaultCommandTemplate instead.
 customCommand: []
+
+# When authRPC is enabled, your auth RPC port will be exposed via service type ClusterIP.
+# You may want to set it to false for node that don't need consensus client
+authRPC:
+  # -- Expose auth RPC port
+  enabled: true
 
 # When p2pNodePort is enabled, your P2P port will be exposed via service type NodePort.
 # This is useful if you want to expose and announce your node to the Internet.
